@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Trustt.Administration.SDK.Services;
+using WindowsFormsApp5;
 
 namespace AdminSDKClientSample
 {
@@ -73,8 +75,38 @@ namespace AdminSDKClientSample
 
         private void button9_Click(object sender, EventArgs e)
         {
-            TrusttAdminAPI api = new TrusttAdminAPI(helper.Settings);
+            try
+            {
+                TrusttAdminAPI api = new TrusttAdminAPI(helper.Settings);
             var response = api.GetUserList();
+            if (response.Success)
+            {
+                textBox1.Text = JsonConvert.SerializeObject(response.Data);
+            }
+            else
+                MessageBox.Show("Error : " + response.Errors);
+
+
+            
+
+        }
+            catch (Exception ex)
+            {
+                MessageBox.Show( ex.Message);
+            }
+
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            GetActivitiesByUser activities = new GetActivitiesByUser(helper, textBox1);
+            activities.Show();
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            TrusttAdminAPI api = new TrusttAdminAPI(helper.Settings);
+            var response = api.GetActivitiesList();
             if (response.Success)
             {
                 textBox1.Text = JsonConvert.SerializeObject(response.Data);
