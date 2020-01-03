@@ -81,7 +81,7 @@ namespace AdminSDKClientSample
             var response = api.GetUserList();
             if (response.Success)
             {
-                textBox1.Text = JsonConvert.SerializeObject(response.Data);
+                textBox1.Text = JsonConvert.SerializeObject(response.Data, Formatting.Indented);
             }
             else
                 MessageBox.Show("Error : " + response.Errors);
@@ -109,11 +109,48 @@ namespace AdminSDKClientSample
             var response = api.GetActivitiesList();
             if (response.Success)
             {
-                textBox1.Text = JsonConvert.SerializeObject(response.Data);
+                textBox1.Text = JsonConvert.SerializeObject(response.Data, Formatting.Indented);
             }
             else
                 MessageBox.Show("Error : " + response.Errors);
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            TrusttAdminAPI api = new TrusttAdminAPI(helper.Settings);
+            var response = api.GetUsersPendingApproval();
+            if(response.Success)
+            {
+                textBox1.Text = JsonConvert.SerializeObject(response.Data, Formatting.Indented);
+            }
+            else
+                MessageBox.Show("Error : " + response.Errors);
+
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            UserRejected userRejected = new UserRejected(helper, textBox1);
+            userRejected.Show();
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            UserApprove userApprove = new UserApprove(helper, textBox1);
+            userApprove.Show();
+        }
+
+        private void button14_Click(object sender, EventArgs e)
+        {
+            GetBaseFromImage getBaseFromImage = new GetBaseFromImage(helper, textBox1);
+            getBaseFromImage.Show();
+        }
+
+        private void button15_Click(object sender, EventArgs e)
+        {
+            GetCountrySpecs getCountrySpecs = new GetCountrySpecs(helper, textBox1);
+            getCountrySpecs.Show();
         }
     }
 }

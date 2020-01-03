@@ -64,7 +64,7 @@ namespace WindowsFormsApp5
                 var response = api.GetActivitiesList(textBox1.Text,querry);
                 if (response.Success)
                 {
-                    _textBox.Text = JsonConvert.SerializeObject(response.Data);
+                    _textBox.Text = JsonConvert.SerializeObject(response.Data, Formatting.Indented);
                 }
                 else
                 {

@@ -44,7 +44,7 @@ namespace AdminSDKClientSample
           var response=  api.ChangePassword(changePassword);
             if (!response.Success)
                 MessageBox.Show("Error : "+response.Errors);
-            _textBox.Text = JsonConvert.SerializeObject(response.Data);
+            _textBox.Text = JsonConvert.SerializeObject(response.Data, Formatting.Indented);
             this.Close();
         }
     }
