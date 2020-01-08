@@ -31,18 +31,19 @@ namespace AdminSDKClientSample
 
         private void button1_Click(object sender, EventArgs e)
         {
+            
             try
             {
                 var response = api.GetProfile(textBox1.Text);
                 if (response.Success)
                 {
+
+                    _textBox.Text = JsonConvert.SerializeObject(response.Data, Formatting.Indented);
                 }
                 else
                 {
-                    MessageBox.Show("Error : " + response.Errors);
+                    _textBox.Text = JsonConvert.SerializeObject(response.Errors.ToList(), Formatting.Indented);
                 }
-
-                 _textBox.Text = JsonConvert.SerializeObject(response.Data, Formatting.Indented);
             }
             catch (Exception ex)
             {
@@ -51,6 +52,8 @@ namespace AdminSDKClientSample
 
             this.Close();
         }
+
+       
 
         private void button2_Click(object sender, EventArgs e)
         {

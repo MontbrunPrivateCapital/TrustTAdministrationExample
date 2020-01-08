@@ -11,6 +11,7 @@ using Trustt.Administration.SDK.Services;
 using Trustt.Administration.SDK.Models;
 using AdminSDKClientSample;
 using Newtonsoft.Json;
+using RestSharp;
 
 namespace WindowsFormsApp5
 {
@@ -37,16 +38,21 @@ namespace WindowsFormsApp5
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var response = api.RejectUserVerification(textBox1.Text);
+            NoteModel model = new NoteModel {
+            Data=textBox2.Text
+         };
+            var response = api.RejectUserVerification(textBox1.Text,model);
             if (response.Success)
             {
+                _textBox.Text = JsonConvert.SerializeObject(response.Data, Formatting.Indented);
             }
             else
             {
-                MessageBox.Show("Error :" + response.Errors);
+                _textBox.Text = JsonConvert.SerializeObject(response.Errors.ToList(), Formatting.Indented);
             }
-            _textBox.Text = JsonConvert.SerializeObject(response.Data, Formatting.Indented);
             this.Close();
         }
+
+
     }
 }

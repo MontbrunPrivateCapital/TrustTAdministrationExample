@@ -68,7 +68,7 @@ namespace WindowsFormsApp5
                 }
                 else
                 {
-                    MessageBox.Show("Error : " + response.Errors);
+                    _textBox.Text = JsonConvert.SerializeObject(response.Errors.ToList(), Formatting.Indented);
                 }
             }
             catch (Exception ex)
