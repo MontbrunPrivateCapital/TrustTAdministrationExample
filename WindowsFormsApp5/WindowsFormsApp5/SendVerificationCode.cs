@@ -40,12 +40,13 @@ namespace AdminSDKClientSample
             var response =api.SendVerificationCode(request);
             if (response.Success)
             {
+
+                _textBox.Text = JsonConvert.SerializeObject(response.Data, Formatting.Indented);
             }
             else
             {
-                MessageBox.Show("Error :" + response.Errors);
+                _textBox.Text = JsonConvert.SerializeObject(response.Errors.ToList(), Formatting.Indented);
             }
-            _textBox.Text = JsonConvert.SerializeObject(response.Data, Formatting.Indented);
 
             this.Close();
         }

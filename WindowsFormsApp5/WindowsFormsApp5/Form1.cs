@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Trustt.Administration.SDK.Models;
 using Trustt.Administration.SDK.Services;
 using WindowsFormsApp5;
 
@@ -84,18 +85,17 @@ namespace AdminSDKClientSample
                 textBox1.Text = JsonConvert.SerializeObject(response.Data, Formatting.Indented);
             }
             else
-                MessageBox.Show("Error : " + response.Errors);
-
-
-            
-
-        }
+                    textBox1.Text = JsonConvert.SerializeObject(response.Errors.ToList(), Formatting.Indented);
+                                 
+            }
             catch (Exception ex)
             {
-                MessageBox.Show( ex.Message);
+                textBox1.Text = JsonConvert.SerializeObject(ex.Message, Formatting.Indented);
             }
 
         }
+
+       
 
         private void button10_Click(object sender, EventArgs e)
         {
