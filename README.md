@@ -5,7 +5,7 @@ This is the Trustt Admin API Developer SDK's official documentation.
 Using this tool, you can do every kind of administration task in your trustt account.
 
 You may also see our swagger documentation, to test endpoints and see data format. Check out
-[https://trustt-admin-api.azurewebsites.net/index.html](https://trustt-admin-api.azurewebsites.net/index.html)
+[https://trustt-admin-api-test.azurewebsites.net/index.html](https://trustt-admin-api-test.azurewebsites.net/index.html)
 
 # Getting Started
 
@@ -18,7 +18,7 @@ var settings =
     new AppSettings 
     { 
         ApiKey = "asd09ad098a0d89wn0r98c08",
-        BasePath = "/",
+        BasePath = "https://trustt-admin-api-test.azurewebsites.net",
         TenantId = "asdf" 
     }; 
 ```
@@ -26,26 +26,33 @@ var settings =
 Then instantiate main API's object, just use `AppSettings` as constructor.
 
 ```C#
-    var _api =
-        new TrusttAdminAPI(settings)
+    var _api = new TrusttAdminAPI(settings)
 ```
 
 So, you can also instantiate it as dependency injection.
 
 ```json
 // this is the appsettings.json
-"TrusttAdmin":{
-    "Host":"trustt-admin-api.azurewebsites.net",
-    "Bearer" : "t0k3n3xample99777asdfipsumlorem"
+
+// this section store api settings
+"TrusttAdminAPI":{
+    "BasePath":"https://trustt-admin-api-test.azurewebsites.net",
+    "ApiKey" : "t0k3n3xample99777asdfipsumlorem",
+    "TenantId": "asdf"
 }
 ```
 
+Configure AppSettings, then add the `TrusttAdminAPI` object as transient service.
+
 ```C# 
 // this is your «services» section in Startup.cs
-services.AddTransient(p =>
-    Configuration.GetSection("TrusttAdmin").Get<AppSettings>());
 
-services.AddTransient<TrusttAdminAPI>();
+// bind the «TrusttAdminAPI» to «AppSettings» object
+services.AddTransient(p =>
+    Configuration.GetSection("TrusttAdminAPI").Get<AppSettings>());
+
+// add «TrusttAdminAPI» as trandsient service using «ITrusttAdminAPI» interface
+services.AddTransient<ITrusttAdminAPI, TrusttAdminAPI>();
 ```
 
 Once we have an instance of `TrusttAdminAPI`, we can proceed to query the api as high level object. 
@@ -67,11 +74,31 @@ Where `T` will holds model class with convenient data formating.
 
 If operation was complete successfully, `.Success` property wil be `true` and `.Data` will carry on object model with expected data.
 
-If operation was not successfully, `.Success` property wil be `false` and `.Data` becomes `null`. `.Error` property will container a list of errors involved if any.
+If operation was not successfully, `.Success` property wil be `false`, then `.Data` becomes `null` and `.Error` property will contain a list of errors if any.
 
 # Endpoints
 
-From now, we assume **_api** as a valid `TrusttAdminAPI` instance and we'll call it.
+From now, we assume there is a scoped variable named «**_api**» containing a valid `TrusttAdminAPI` instance.
+
+For example, assume the following dependency injection:
+
+```C#
+public class TrusttService
+{
+    private readonly ITrusttAdminAPI _api;
+
+    public TrusttService(ITrusttAdminAPI api)
+    {
+        _api = api;
+    }
+
+    public SomeClass SomeMethod()
+    {
+        // all the examples happens here
+    }
+
+}
+```
 
 ## Login
 
@@ -90,6 +117,7 @@ var credentials =
     };
 
 // perform the request to the api
+// get back response and set in a convenient variable
 var response = _api.Login(credentials);
 
 // the following example will fetch your token
@@ -116,7 +144,7 @@ _api.VerificationCode(new EmailRequest {Email = "someuser@domain.com"});
 
 ## TwoFactorGeneration
 
-Send a code toe user related in the given email. Usefully to perform some "sensible" operation where the user should confirm it.
+Sen a code to the user related in the given email. Usefully to perform some "sensible" operation where the user should confirm it.
 
 WARNING! This endpoint expect a user's ID as argument. Should by a GUID but as string **not as Guid instance**.
 
@@ -141,7 +169,7 @@ var totalAvalaibleBalance =
 
 ## ChangePassword
 
-Change your current password by the given new password, yo should also provide new the old password.
+Change your current password by the given new password, yo should also provide the old password.
 
 ```C#
 var chpwr =
@@ -211,9 +239,9 @@ var activities =
     .Select(r => r.Data);
 ```
 
-Yo can use `ActivityQueryRequest` as filter to perform specific search. Checkout the properties `.InitDate` and `.FinishDate` to reduce search scope, setting dates will get a activity between given dates. If you set InitDate you should also set a FinishDate, it works in ranges.
+Yo can use `ActivityQueryRequest` as filter to perform specific search. Checkout the properties `.InitDate` and `.FinishDate` to reduce search scope, setting dates will get a activity between given dates. If you set `InitDate` you should also set a `FinishDate`, it works in ranges.
 
-You may also fetch all your activities using not arguments but is not recommended.
+You may also fetch all your activities using not arguments, we don't recommend this but you may need sometimes.
 
 ```C#
 _api.GetActivitiesList()
@@ -221,7 +249,7 @@ _api.GetActivitiesList()
 
 ## SetWhiteLabelSettings
 
-Customize your white label colors and font.
+Customize your white label colors.
 
 You should use a `Colors` object, specifying all the related colors in properties as html or rgb code as string. You can use a [color selector](https://htmlcolorcodes.com/es/selector-de-color/) to generate and get code colors.
 
@@ -244,20 +272,24 @@ Ensure every color should starting with «#».
 
 ## GetUsersPendingApproval
 
-Get a list of all user to be pending for approve.
+Get a list of all request to be pending for approve.
 
 ```C#
-_api.GetUsersPendingApproval(whiteLabel);
+
+// get all documentsId 
+var documents = 
+    _api.GetUsersPendingApproval(whiteLabel)
+    .Select(d => d.Data.Id);
 ```
 
 ## ApproveUserVerification
 
-Mark an user as verified by its ID.
+Mark an request as verified by its ID.
 
 WARNING! This endpoint expect a user's ID as argument. Should by a GUID but as string **not as Guid instance**.
 
 ```C#
-_api.## ApproveUserVerification("cb4b6822-f4c4-40f3-a128-6c1b72549874");
+_api.ApproveUserVerification("cb4b6822-f4c4-40f3-a128-6c1b72549874");
 ```
 
 ## RejectUserVerification
@@ -276,7 +308,7 @@ _api.ApproveUserVerification("cb4b6822-f4c4-40f3-a128-6c1b72549874",note);
 
 ## GetBase64ImageFromDocument
 
-Get documents uploaded by users as base64 encoding. You should provide a document's ID.
+Get documents uploaded by users as base64 encoding. You should provide a document's ID, see the `GetUsersPendingApproval` endpoint.
 
 ```C#
 var picture =
