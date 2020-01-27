@@ -242,3 +242,36 @@ _api.SetWhiteLabelSettings(whiteLabel);
 
 Ensure every color should starting with «#».
 
+## GetUsersPendingApproval
+
+Get a list of all user to be pending for approve.
+
+```C#
+_api.GetUsersPendingApproval(whiteLabel);
+```
+
+## ApproveUserVerification
+
+Mark an user as verified by its ID.
+
+WARNING! This endpoint expect a user's ID as argument. Should by a GUID but as string **not as Guid instance**.
+
+```C#
+_api.## ApproveUserVerification("cb4b6822-f4c4-40f3-a128-6c1b72549874");
+```
+
+## RejectUserVerification
+
+Reject a user verification, refusing user account creating and disabling that email to login.
+
+```C#
+var note = 
+    new NoteModel
+    {
+        Data = "KYC issue, please double check provided info"
+    };
+
+_api.ApproveUserVerification("cb4b6822-f4c4-40f3-a128-6c1b72549874",note);
+```
+
+
