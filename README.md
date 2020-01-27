@@ -166,5 +166,29 @@ if (!request.Success)
         Console.WriteLine(e);
 ```
 
+## ResetPassword
 
+Performs a password reset procedure, using the emailed code. Requirers all the field to by populated or will fail.
+
+```C#
+var pr = 
+    new ResetPassword
+    {
+        Code = "0986", // code got by email
+        Email = "user@domain.com", // user to be reset
+        Password = "yourBrandNewPassword"
+    };
+
+_api.ResetPassword(pr);
+```
+
+## GetUserList
+
+Get a full list of all your users.
+
+```C#
+var users = 
+    _api.GetUserList()
+        .Select(ur => ur.Data);
+```
 
