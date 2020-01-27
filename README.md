@@ -147,11 +147,24 @@ Change your current password by the given new password, yo should also provide n
 var chpwr =
     new ChangePaswordRequest
     {
-        NewPassword = "topsecretstrongpassword",
-        OldPassword = "1234"
+        OldPassword = "1234",
+        NewPassword = "topsecretstrongpassword"
     };
 ```
 
 API will accept any kind of password except and empty one, but remember you should always use strongest possible password. Check for https://passwordsgenerator.net/ in order to generate the best and secure passwords.
+
+## ForgotPassword
+
+Trigger a password forget procedure to the given email (as string) is there is a related user.
+
+```C#
+var request = _api.ForgotPassword("somebody@domain.com");
+
+if (!request.Success)
+    foreach(var e in request.Errors)
+        Console.WriteLine(e);
+```
+
 
 
