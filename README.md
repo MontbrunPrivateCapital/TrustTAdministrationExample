@@ -106,3 +106,52 @@ else
     Console.WriteLine($"request error: {data}");
 ```
 
+## VerificationCode
+
+Send a verification code to the user related in given email. When a new user arrives to the system, a verification code should be send. Should not confused with **TwoFactorGeneration**.
+
+```C#
+_api.VerificationCode(new EmailRequest {Email = "someuser@domain.com"});
+```
+
+## TwoFactorGeneration
+
+Send a code toe user related in the given email. Usefully to perform some "sensible" operation where the user should confirm it.
+
+WARNING! This endpoint expect a user's ID as argument. Should by a GUID but as string **not as Guid instance**.
+
+```C#
+_api.VerificationCode("cb4b6822-f4c4-40f3-a128-6c1b72549874");
+```
+
+## GetProfile
+
+Returns full user profile by the given user' ID.
+
+WARNING! This endpoint expect a user's ID as argument. Should by a GUID but as string **not as Guid instance**.
+
+```C#
+var totalAvalaibleBalance =
+    _api
+        .GetProfile("cb4b6822-f4c4-40f3-a128-6c1b72549874")
+        .Data.Sources
+        .Where(s => s.WalletType==0)
+        .Select(s => s.Balance).Sum();
+```
+
+## ChangePassword
+
+Change your current password by the given new password, yo should also provide new the old password.
+
+```C#
+var chpwr =
+    new ChangePaswordRequest
+    {
+        NewPassword = "topsecretstrongpassword",
+        OldPassword = "1234"
+    };
+```
+
+API will accept any kind of password except and empty one, but remember you should always use strongest possible password. Check for https://passwordsgenerator.net/ in order to generate the best and secure passwords.
+
+
