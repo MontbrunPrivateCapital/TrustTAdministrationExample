@@ -1,20 +1,76 @@
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+
+This is the Trustt Admin API Developer SDK's official documentation.
+
+Using this tool, you can do every kind of administration task in your trustt account.
+
+You may also see our swagger documentation, to test endpoints and see data format. Check out
+[https://trustt-admin-api.azurewebsites.net/index.html](https://trustt-admin-api.azurewebsites.net/index.html)
 
 # Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+- lack, define authentication's credential obtaining
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+First, instantiate Trustt SDK main object using a `TrusttAdminAPI` instance. Constructor expects a `AppSettings` as argument, this object contains all the API's client configuration. So, this mean, you could use in Dependency Injection like this.
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+```C#
+var settings = 
+    new AppSettings 
+    { 
+        ApiKey = "asd09ad098a0d89wn0r98c08",
+        BasePath = "/",
+        TenantId = "asdf" 
+    }; 
+```
+
+Then instantiate main API's object, just use `AppSettings` as constructor.
+
+```C#
+    var _api =
+        new TrusttAdminAPI(settings)
+```
+
+So, you can also instantiate it as dependency injection.
+
+```json
+// this is the appsettings.json
+"TrusttAdmin":{
+    "Host":"trustt-admin-api.azurewebsites.net",
+    "Bearer" : "t0k3n3xample99777asdfipsumlorem"
+}
+```
+
+```C# 
+// this is your «services» section in Startup.cs
+services.AddTransient(p =>
+    Configuration.GetSection("TrusttAdmin").Get<AppSettings>());
+
+services.AddTransient<TrusttAdminAPI>();
+```
+
+Once we have an instance of `TrusttAdminAPI`, we can proceed to query the api as high level object. 
+
+# Response Object
+
+Every request returns an IResponse object carrying response results and payload. The response implements the following interface.
+
+```C#
+public interface IResponse<T>
+{
+    bool Success { get; set; }
+    string[] Errors { get; set; }
+    T Data { get; set; }
+}
+```
+
+Where `T` will holds model class with convenient data formating. 
+
+If operation was complete successfully, `.Success` property wil be `true` and `.Data` will carry on object model with expected data.
+
+If operation was not successfully, `.Success` property wil be `false` and `.Data` becomes `null`
+
+# Endpoints
+
+From now, we assume **_api** as a valid `TrusttAdminAPI` instance and we'll call it.
+
+## 
