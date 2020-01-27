@@ -192,3 +192,24 @@ var users =
         .Select(ur => ur.Data);
 ```
 
+## GetActivitiesList
+
+Get a list of activities related to the given user. Yo can also make some filtering options, for example, we are looking for activity related to `Coin` operations.
+
+```C#
+
+var user = "username@domain.com";
+
+var filter =
+    new ActivityQueryRequest
+    {
+        WalletAccountType = WalletAccountTypes.Coin
+    };
+
+var activities = 
+    _api.GetActivitiesList(user,filter)
+    .Select(r => r.Data);
+```
+
+Yo can use `ActivityQueryRequest` as filter to perform specific search. Checkout the properties `.InitDate` and `.FinishDate` to reduce search scope, setting dates will get a activity between given dates. If you set InitDate you should also set a FinishDate, it works in ranges.
+
