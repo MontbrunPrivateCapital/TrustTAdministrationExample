@@ -67,10 +67,42 @@ Where `T` will holds model class with convenient data formating.
 
 If operation was complete successfully, `.Success` property wil be `true` and `.Data` will carry on object model with expected data.
 
-If operation was not successfully, `.Success` property wil be `false` and `.Data` becomes `null`
+If operation was not successfully, `.Success` property wil be `false` and `.Data` becomes `null`. `.Error` property will container a list of errors involved if any.
 
 # Endpoints
 
 From now, we assume **_api** as a valid `TrusttAdminAPI` instance and we'll call it.
 
-## 
+## Login
+
+Login method proceed to get a valid login token. Internally, the instance will be fulfilled with token mechanism, so, you do not need to handle this, just perform a `Login()` request before any other.
+
+With this endpoint we also learn the basic SDK workflow.
+
+```C#
+
+// load the model and fill your data
+var credentials =
+    new UserRegisterLoginRequest
+    {
+        Email = "youremail@domain.com,
+        Password = "topsecretword"
+    };
+
+// perform the request to the api
+var response = _api.Login(credentials);
+
+// the following example will fetch your token
+// or get the error if any
+var data = 
+    response.Success ?
+    response.Data.AccessToken :
+    response.Data.Error.First();
+
+// example performing some code logic
+if (response.Success)
+    Console.WriteLine($"your token is {data}");
+else
+    Console.WriteLine($"request error: {data}");
+```
+
