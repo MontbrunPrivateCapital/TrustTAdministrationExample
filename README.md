@@ -85,7 +85,7 @@ With this endpoint we also learn the basic SDK workflow.
 var credentials =
     new UserRegisterLoginRequest
     {
-        Email = "youremail@domain.com,
+        Email = "youremail@domain.com",
         Password = "topsecretword"
     };
 
@@ -212,4 +212,33 @@ var activities =
 ```
 
 Yo can use `ActivityQueryRequest` as filter to perform specific search. Checkout the properties `.InitDate` and `.FinishDate` to reduce search scope, setting dates will get a activity between given dates. If you set InitDate you should also set a FinishDate, it works in ranges.
+
+You may also fetch all your activities using not arguments but is not recommended.
+
+```C#
+_api.GetActivitiesList()
+```
+
+## SetWhiteLabelSettings
+
+Customize your white label colors and font.
+
+You should use a `Colors` object, specifying all the related colors in properties as html or rgb code as string. You can use a [color selector](https://htmlcolorcodes.com/es/selector-de-color/) to generate and get code colors.
+
+```C#
+var whiteLabel = 
+        new SettingsModel
+        {
+            Colors = new Colors
+            {
+                Primary = "#335BFF",
+                Main = "#7133FF"
+                ...
+            }
+        };
+
+_api.SetWhiteLabelSettings(whiteLabel);
+```
+
+Ensure every color should starting with «#».
 
