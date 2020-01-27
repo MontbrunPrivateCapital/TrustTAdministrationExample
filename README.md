@@ -274,4 +274,27 @@ var note =
 _api.ApproveUserVerification("cb4b6822-f4c4-40f3-a128-6c1b72549874",note);
 ```
 
+## GetBase64ImageFromDocument
+
+Get documents uploaded by users as base64 encoding. You should provide a document's ID.
+
+```C#
+var picture =
+    _api.ApproveUserVerification("cb4b6822-f4c4-40f3-a128-6c1b72549874")
+    .Data.Picture;
+```
+
+## GetCountrySpecs
+
+Get required data fields to the given country. Each country has its own requirements to fulfill KYC demands.
+
+```C#
+var individualVF =
+    _api.GetCountrySpecs("ES").Data
+    .verificationFields.individual
+    .Select(i => i.minimum);
+```
+
+Country code is expected as  ISO-3166 codes. You can check countries and codes at [https://www.iban.com/country-codes](https://www.iban.com/country-codes).
+
 
