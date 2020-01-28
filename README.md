@@ -7,6 +7,11 @@ Using this tool, you can do every kind of administration task in your trustt acc
 You may also see our swagger documentation, to test endpoints and see data format. Check out
 [https://trustt-admin-api-test.azurewebsites.net/index.html](https://trustt-admin-api-test.azurewebsites.net/index.html)
 
+# Install
+
+In order to obtains SDK's library, you add a feed pointing to our servers upstream. There is a nuget.config file in the project with a convenient configuration but if you need, [check this link target](https://elitecapitalresearch.pkgs.visualstudio.com/d58d7a4f-0b9f-4539-a60f-a77a36d702e5/_packaging/TrustTSDKs%40Local/nuget/v3/index.json)
+
+
 # Getting Started
 
 - lack, define authentication's credential obtaining
